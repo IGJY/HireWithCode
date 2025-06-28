@@ -3,12 +3,12 @@
     <h2>接受挑战</h2>
     <form @submit.prevent="onSubmit">
       <div class="form-group">
-        <label>GitHub ID</label>
-        <input v-model="github" required placeholder="请输入你的GitHub ID" />
+        <label for="github-id">GitHub ID</label>
+        <input id="github-id" v-model="github" required placeholder="请输入你的GitHub ID" />
       </div>
       <div class="form-group">
-        <label>邮箱</label>
-        <input v-model="email" type="email" required placeholder="请输入邮箱" />
+        <label for="email">邮箱</label>
+        <input id="email" v-model="email" type="email" required placeholder="请输入邮箱" />
       </div>
       <button type="submit">接受挑战</button>
     </form>
@@ -38,7 +38,6 @@ function onSubmit() {
 }
 .form-group {
   margin-bottom: 20px;
-  /* width: 100%; */
 }
 label {
   display: block;
@@ -46,7 +45,7 @@ label {
   font-weight: bold;
 }
 input {
-  /* width: 100%; */
+  width: 100%;
   padding: 8px 12px;
   border: 1px solid #ddd;
   border-radius: 6px;

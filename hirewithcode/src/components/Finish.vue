@@ -3,12 +3,12 @@
     <h2>完成挑战</h2>
     <form @submit.prevent="onSubmit">
       <div class="form-group">
-        <label>GitHub 仓库 URL</label>
-        <input v-model="repo" required placeholder="请输入你的GitHub仓库地址" />
+        <label for="github-url">GitHub 仓库 URL</label>
+        <input id="github-url" v-model="repo" required placeholder="请输入你的GitHub仓库地址" />
       </div>
       <div class="form-group">
-        <label>Vercel 在线体验地址</label>
-        <input v-model="vercel" required placeholder="请输入你的Vercel在线体验地址" />
+        <label for="vercel">Vercel 在线体验地址</label>
+        <input id="vercel" v-model="vercel" required placeholder="请输入你的Vercel在线体验地址" />
       </div>
       <button type="submit">提交作品</button>
     </form>
