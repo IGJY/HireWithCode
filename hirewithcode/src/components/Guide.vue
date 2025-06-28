@@ -1,4 +1,5 @@
 <template>
+  <!-- TODO 现在会出现按钮先出现内容延迟出现的问题，因为内容是异步通过链接获取的，看看后面需不需要解决 -->
   <div class="guide-container">
     <div v-html="htmlContent" class="markdown-body"></div>
   </div>
