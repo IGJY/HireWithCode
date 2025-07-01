@@ -4,18 +4,55 @@
     <div v-html="htmlContent" class="markdown-body"></div>
   </div>
   <div class="button-container">
-    <button class="accept-btn" @click="goToAccept">接受挑战</button>
-    <button class="finish-btn" @click="goToFinish">完成挑战</button>
+    <button class="accept-btn" @click="openDialog('accept')">接受挑战</button>
+    <button class="finish-btn" @click="openDialog('finish')">完成挑战</button>
   </div>
+  <ChallengeDialog
+    :visible="dialogVisible"
+    :onSubmit="handleDialogSubmit"
+    :onClose="closeDialog"
+  >
+    <template #title>
+      {{ dialogType === 'accept' ? '接受挑战' : '完成挑战' }}
+    </template>
+    <template #default>
+      <form @submit.prevent>
+        <div v-if="dialogType === 'accept'">
+          <div class="form-group">
+            <label for="github">GitHub ID</label>
+            <input id="github" v-model="acceptForm.github" required placeholder="请输入你的GitHub ID" />
+          </div>
+          <div class="form-group">
+            <label for="email">邮箱</label>
+            <input id="email" v-model="acceptForm.email" type="email" required placeholder="请输入邮箱" />
+          </div>
+        </div>
+        <div v-else>
+          <div class="form-group">
+            <label for="repo">GitHub 仓库 URL</label>
+            <input id="repo" v-model="finishForm.repo" required placeholder="请输入你的GitHub仓库地址" />
+          </div>
+          <div class="form-group">
+            <label for="vercel">Vercel 在线体验地址</label>
+            <input id="vercel" v-model="finishForm.vercel" required placeholder="请输入你的Vercel在线体验地址" />
+          </div>
+        </div>
+      </form>
+    </template>
+  </ChallengeDialog>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
 import { marked } from 'marked'
+import ChallengeDialog from './ChallengeDialog.vue'
 
-const router = useRouter()
 const htmlContent = ref('加载中...')
+const dialogVisible = ref(false)
+const dialogType = ref('accept')
+
+const acceptForm = ref({ github: '', email: '' })
+const finishForm = ref({ repo: '', vercel: '' })
 
 onMounted(async () => {
   // 这里直接用README.md的远程链接
@@ -24,12 +61,34 @@ onMounted(async () => {
   htmlContent.value = marked.parse(md)
 })
 
-function goToAccept() {
-  router.push('/accept')
+function openDialog(type) {
+  dialogType.value = type
+  dialogVisible.value = true
 }
-
-function goToFinish() {
-  router.push('/finish')
+function closeDialog() {
+  dialogVisible.value = false
+}
+function handleDialogSubmit() {
+  dialogVisible.value = false
+  if (dialogType.value === 'accept') {
+    if (!acceptForm.value.github || !acceptForm.value.email) {
+      alert('请填写完整信息')
+      return
+    }
+    alert('接受挑战成功！')
+    // 这里可以处理 acceptForm.value
+    // 把输入框的内容清零
+    acceptForm.value = { github: '', email: '' }
+  } else {
+    if (!finishForm.value.repo || !finishForm.value.vercel) {
+      alert('请填写完整信息')
+      return
+    }
+    alert('提交成功！祝你面试顺利！')
+    // 这里可以处理 finishForm.value
+    // 把输入框的内容清零
+    finishForm.value = { repo: '', vercel: '' }
+  }
 }
 </script>
 
@@ -79,5 +138,20 @@ function goToFinish() {
   background: #369870;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(66, 184, 131, 0.3);
+}
+.form-group {
+  margin-bottom: 20px;
+}
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+input {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  /* width: 100%; */
 }
 </style> 
